@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handwritten & Traditional</title>
+  <link rel="icon" href="/Handwritten.ico">
+  <style>
+    @font-face { font-family: Wolf; src: url(Fonts/Swim\ the\ Wolf\ Cursive\ Script\ Font-Traditional\ Chinese.ttf); }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f7f3e9 0%, #e8e0d5 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      padding: 0.5rem;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .card {
+      max-width: 500px;
+      width: 100%;
+      height: 98vh;
+      max-height: 750px;
+      background: rgba(255, 250, 240, 0.75);
+      backdrop-filter: blur(4px);
+      padding: 1rem 1.2rem 1.2rem;
+      border-radius: 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.08);
+      border: 1px solid #f0e6d8;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ==== HEADER ==== */
+    h1 {
+      font-size: 1.3rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: #3d2c1e;
+      text-align: center;
+      margin-bottom: 0.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    h1 small {
+      font-size: 1rem;
+      font-weight: 300;
+      color: #7a624b;
+      background: #eaddd0;
+      padding: 0.1rem 0.8rem;
+      border-radius: 40px;
+      letter-spacing: 0.5px;
+    }
+
+    .sub {
+      text-align: center;
+      color: #6b5a48;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      border-bottom: 2px dashed #dacfc1;
+      padding-bottom: 0.3rem;
+      flex-shrink: 0;
+    }
+
+    /* ==== INPUT AREA ==== */
+    .input-area {
+      margin-bottom: 0.6rem;
+      flex-shrink: 0;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 0.5rem 0.8rem;
+      font-size: 1.1rem;
+      font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+      background: #fefcf7;
+      border: 2px solid #d6c9bb;
+      border-radius: 20px;
+      resize: none;
+      min-height: 40px;
+      max-height: 60px;
+      color: #2d241b;
+      outline: none;
+      transition: 0.2s;
+      box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.02);
+      line-height: 1.4;
+    }
+
+    textarea:focus {
+      border-color: #b7a084;
+      box-shadow: 0 0 0 4px rgba(183, 160, 132, 0.2);
+      background: #fffdf9;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: #e1d3c4;
+      border: none;
+      padding: 0.3rem 1.2rem;
+      border-radius: 40px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #3a2e23;
+      cursor: pointer;
+      transition: 0.15s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+      border: 1px solid #d1bfae;
+      letter-spacing: 0.3px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-primary {
+      background: #b7a084;
+      border-color: #9e856b;
+      color: #fcf6ed;
+      box-shadow: 0 4px 8px rgba(130, 100, 70, 0.12);
+    }
+
+    .btn-primary:hover {
+      background: #a68b70;
+      transform: scale(0.97);
+      border-color: #8a725b;
+    }
+
+    .btn:hover {
+      background: #d3c3b2;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.94);
+    }
+
+    /* ==== RESULT GRID - VERTICAL WITH AUTO-SIZING ==== */
+    .result-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+      min-height: 0;
+      margin-top: 0.3rem;
+    }
+
+    .result-card {
+      background: #fcf8f0;
+      border-radius: 16px;
+      padding: 0.5rem 0.8rem 0.6rem;
+      box-shadow: inset 0 2px 6px rgba(255, 247, 235, 0.6), 0 4px 12px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e6d7c8;
+      transition: 0.2s;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+      flex: 0 1 auto; /* Changed from flex:1 to auto-size */
+    }
+
+    .result-card:hover {
+      border-color: #cdb9a6;
+      background: #fffbf5;
+    }
+
+    /* Cards will expand based on content */
+    .result-card:first-child {
+      flex: 0 1 auto;
+    }
+
+    .result-card:last-child {
+      flex: 0 1 auto;
+    }
+
+    .result-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #7f6a56;
+      margin-bottom: 0.2rem;
+      border-bottom: 1px solid #e7dacd;
+      padding-bottom: 0.2rem;
+      flex-shrink: 0;
+    }
+
+    .result-label span {
+      background: #dacfc1;
+      color: #3d2e1f;
+      padding: 0.05rem 0.5rem;
+      border-radius: 20px;
+      font-size: 1rem;
+    }
+
+    .output {
+      font-size: 1.8rem;
+      line-height: 1.3;
+      word-break: break-word;
+      overflow-y: auto;
+      padding: 0.1rem 0.1rem;
+      color: #201a14;
+      font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+      max-height: 100%;
+      display: flex;
+      align-items: center;
+      min-height: 2rem;
+      flex-shrink: 0; /* Prevent shrinking */
+    }
+
+    /* ==== FONT STYLES ==== */
+    .handwritten {
+      font-family: Wolf;
+      font-size: 2.2rem;
+      letter-spacing: 0.03em;
+      font-weight: 400;
+      color: #1e2a1c;
+    }
+
+    .traditional {
+      font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', 'Noto Serif SC', serif;
+      font-weight: 400;
+      color: #2d241b;
+      font-size: 1.8rem;
+    }
+
+    .empty-hint {
+      color: #b4a394;
+      font-size: 0.9rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .footer-note {
+      margin-top: 0.3rem;
+      font-size: 0.55rem;
+      text-align: center;
+      color: #8d7b6a;
+      border-top: 1px solid #ded0c2;
+      padding-top: 0.3rem;
+      letter-spacing: 0.3px;
+      flex-shrink: 0;
+    }
+
+    .footer-note i {
+      font-style: normal;
+      background: #e5d8cb;
+      padding: 0.05rem 0.5rem;
+      border-radius: 30px;
+      font-size: 0.5rem;
+    }
+
+    /* ==== MOBILE OPTIMIZATION ==== */
+    @media (max-width: 600px) {
+      body {
+        padding: 0.3rem;
+        align-items: stretch;
+      }
+
+      .card {
+        padding: 0.5rem 0.6rem 0.6rem;
+        max-height: 100vh;
+        height: 100vh;
+        border-radius: 20px;
+        max-width: 100%;
+      }
+
+      h1 {
+        font-size: 1rem;
+        gap: 4px;
+      }
+
+      h1 small {
+        font-size: .8rem;
+        padding: 0.05rem 0.6rem;
+      }
+
+      .sub {
+        font-size: 0.8rem;
+        margin-bottom: 0.3rem;
+        padding-bottom: 0.2rem;
+      }
+
+      textarea {
+        font-size: 0.9rem;
+        padding: 0.35rem 0.6rem;
+        min-height: 35px;
+        max-height: 50px;
+        border-radius: 16px;
+      }
+
+      .btn {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.7rem;
+        border-radius: 30px;
+      }
+
+      .result-grid {
+        gap: 0.35rem;
+        margin-top: 0.15rem;
+      }
+
+      .result-card {
+        padding: 0.3rem 0.5rem 0.35rem;
+        border-radius: 12px;
+      }
+
+      .result-label {
+        font-size: 0.45rem;
+        gap: 4px;
+        margin-bottom: 0.1rem;
+        padding-bottom: 0.1rem;
+      }
+
+      .result-label span {
+        font-size: 0.4rem;
+        padding: 0.05rem 0.35rem;
+      }
+
+      .output {
+        font-size: 1.4rem;
+        line-height: 1.2;
+        padding: 0.05rem 0.05rem;
+        min-height: 1.5rem;
+      }
+
+      .handwritten {
+        font-size: 2.2rem;
+      }
+
+      .traditional {
+        font-size: 2rem;
+      }
+
+      .empty-hint {
+        font-size: 0.65rem;
+      }
+
+      .footer-note {
+        font-size: 0.45rem;
+        padding-top: 0.2rem;
+        margin-top: 0.15rem;
+      }
+
+      .footer-note i {
+        font-size: 0.4rem;
+        padding: 0.05rem 0.35rem;
+      }
+    }
+
+    /* ==== VERY SMALL PHONES ==== */
+    @media (max-width: 400px) {
+      .card {
+        padding: 0.3rem 0.4rem 0.4rem;
+      }
+
+      h1 {
+        font-size: 1rem;
+      }
+
+      textarea {
+        font-size: 1.2rem;
+        padding: 0.25rem 0.4rem;
+        min-height: 30px;
+        max-height: 40px;
+      }
+
+      .btn {
+        font-size: 0.8rem;
+        padding: 0.12rem 0.5rem;
+      }
+
+      .result-grid {
+        gap: 0.25rem;
+      }
+
+      .result-card {
+        padding: 0.2rem 0.35rem 0.25rem;
+        border-radius: 10px;
+      }
+
+      .result-label {
+        font-size: 0.8rem;
+      }
+
+      .result-label span {
+        font-size: 0.6rem;
+        padding: 0.03rem 0.3rem;
+      }
+
+      .output {
+        font-size: 1.1rem;
+        min-height: 1.2rem;
+      }
+
+      .handwritten {
+        font-size: 2.6rem;
+      }
+
+      .traditional {
+        font-size: 2rem;
+      }
+
+      .footer-note {
+        font-size: 0.4rem;
+        padding-top: 0.15rem;
+        margin-top: 0.1rem;
+      }
+    }
+
+    /* ==== LANDSCAPE MODE ==== */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .card {
+        max-height: 100vh;
+        height: 100vh;
+        padding: 0.25rem 0.6rem 0.3rem;
+      }
+
+      h1 {
+        font-size: 1.2rem;
+        margin-bottom: 0;
+      }
+
+      .sub {
+        font-size: 0.45rem;
+        margin-bottom: 0.15rem;
+        padding-bottom: 0.1rem;
+      }
+
+      textarea {
+        min-height: 25px;
+        max-height: 32px;
+        font-size: 1.2rem;
+        padding: 0.15rem 0.4rem;
+      }
+
+      .btn {
+        font-size: 0.5rem;
+        padding: 0.12rem 0.5rem;
+      }
+
+      .result-grid {
+        gap: 0.2rem;
+        margin-top: 0.1rem;
+        flex-direction: row; /* Side by side in landscape */
+      }
+
+      .result-card {
+        padding: 0.2rem 0.35rem 0.25rem;
+        flex: 1;
+      }
+
+      .result-card:first-child {
+        flex: 1.2;
+      }
+
+      .result-card:last-child {
+        flex: 1;
+      }
+
+      .result-label {
+        font-size: 0.8rem;
+        margin-bottom: 0.05rem;
+        padding-bottom: 0.05rem;
+      }
+
+      .result-label span {
+        font-size: 0.6rem;
+      }
+
+      .output {
+        font-size: 0.9rem;
+        line-height: 1.1;
+        min-height: 1rem;
+      }
+
+      .handwritten {
+        font-size: 2.6rem;
+      }
+
+      .traditional {
+        font-size: 2rem;
+      }
+
+      .footer-note {
+        display: none;
+      }
+    }
+
+    /* When text has many lines, allow more space */
+    .output:has(br) {
+      flex-shrink: 1;
+    }
+
+    /* Auto-expand textarea on input */
+    textarea {
+      transition: min-height 0.2s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>
+      汉字 · 书写
+      <small>handwritten & traditional</small>
+    </h1>
+    <div class="sub">✍️ 输入简体中文 · 即刻呈现手写与繁体</div>
+
+    <div class="input-area">
+      <textarea id="chineseInput" placeholder="例如： 我喜欢学习中文书法。">我喜欢学习中文书法。</textarea>
+      <div class="btn-group">
+        <button class="btn" id="clearBtn" type="button">⟲ 清空</button>
+        <button class="btn btn-primary" id="convertBtn" type="button">✦ 转换</button>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <!-- 手写风格 -->
+      <div class="result-card">
+        <div class="result-label">
+          🖊️ 手写风格 <span>自定义字体</span>
+        </div>
+        <div id="handwrittenOutput" class="output handwritten">我喜欢学习中文书法。</div>
+      </div>
+      <!-- 传统风格 -->
+      <div class="result-card">
+        <div class="result-label">
+          📜 传统汉字 <span>繁体</span>
+        </div>
+        <div id="traditionalOutput" class="output traditional">我喜歡學習中文書法。</div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <i>简体 → 繁体 (OpenCC 标准) · 手写字体为自定义字体</i>
+    </div>
+  </div>
+
+  <!-- OpenCC 转换 -->
+  <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.min.js"></script>
+  <script>
+    (function() {
+      const inputEl = document.getElementById('chineseInput');
+      const handwrittenEl = document.getElementById('handwrittenOutput');
+      const traditionalEl = document.getElementById('traditionalOutput');
+      const convertBtn = document.getElementById('convertBtn');
+      const clearBtn = document.getElementById('clearBtn');
+
+      let converter = null;
+      try {
+        converter = new OpenCC.Converter('s2t');
+      } catch (e) {
+        console.warn('OpenCC 加载失败，使用备用映射。', e);
+        converter = {
+          convert: function(text) {
+            const map = {
+              '爱': '愛', '边': '邊', '变': '變', '别': '別', '并': '並', '产': '產',
+              '长': '長', '车': '車', '处': '處', '达': '達', '岛': '島', '导': '導',
+              '东': '東', '动': '動', '对': '對', '儿': '兒', '发': '發', '飞': '飛',
+              '风': '風', '个': '個', '过': '過', '还': '還', '会': '會', '几': '幾',
+              '见': '見', '开': '開', '来': '來', '乐': '樂', '丽': '麗', '里': '裡',
+              '门': '門', '们': '們', '难': '難', '鸟': '鳥', '农': '農', '气': '氣',
+              '区': '區', '认': '認', '师': '師', '时': '時', '书': '書', '术': '術',
+              '树': '樹', '体': '體', '听': '聽', '为': '為', '务': '務', '习': '習',
+              '系': '繫', '写': '寫', '兴': '興', '学': '學', '叶': '葉', '医': '醫',
+              '亿': '億', '义': '義', '应': '應', '鱼': '魚', '语': '語', '园': '園',
+              '这': '這', '针': '針', '证': '證', '只': '隻', '制': '製', '种': '種',
+              '众': '眾', '专': '專', '传': '傳', '国': '國', '华': '華', '万': '萬'
+            };
+            return text.split('').map(ch => map[ch] || ch).join('');
+          }
+        };
+      }
+
+      function updateDisplay(text) {
+        const raw = text || '';
+        if (raw.trim() === '') {
+          handwrittenEl.innerHTML = '<span class="empty-hint">等待输入...</span>';
+          traditionalEl.innerHTML = '<span class="empty-hint">等待输入...</span>';
+          return;
+        }
+        
+        handwrittenEl.textContent = raw;
+        let traditional = '';
+        try {
+          traditional = converter.convert(raw);
+        } catch (e) {
+          console.error('转换错误:', e);
+          traditional = raw;
+        }
+        traditionalEl.textContent = traditional;
+      }
+
+      function convertFromInput() {
+        updateDisplay(inputEl.value);
+      }
+
+      function handleClear() {
+        inputEl.value = '';
+        updateDisplay('');
+      }
+
+      convertBtn.addEventListener('click', convertFromInput);
+      clearBtn.addEventListener('click', handleClear);
+      
+      inputEl.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          convertFromInput();
+        }
+      });
+
+      // Auto-expand textarea based on content
+      inputEl.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 60) + 'px';
+      });
+
+      updateDisplay(inputEl.value);
+    })();
+  </script>
+</body>
+</html>
